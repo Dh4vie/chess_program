@@ -2,6 +2,7 @@ import pygame
 import chess
 from game import Game
 from drawer import PieceDrawer, square_size
+from piece_mover import PieceMover
 
 class ChessGame(Game):
     def __init__(self):
@@ -12,13 +13,16 @@ class ChessGame(Game):
         self.running = True
         self.board = chess.Board()
         self.drawer = PieceDrawer(self.screen, self.board)
-     
+        self.mover = PieceMover(self.board)
+
     def run(self):
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-            
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    self.mover.click_handler(pygame.mouse.get_pos())
+
             self.drawer.draw_board()
             self.drawer.load_pieces()
             pygame.display.flip()
